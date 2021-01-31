@@ -1,11 +1,12 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-const cTable = require("console.table");
+require("console.table");
 const connection = require("./connection.js");
+const Database = require ("./db/class")
 
 //const express = require('express');
 
-Init() {
+function init() {
     inquirer.prompt([{
         type: "list",
         name: "action",
@@ -14,31 +15,31 @@ Init() {
         [
             "View All Employees", 
             new inquirer.Separator(),
-            "View All Employees By Department",
+            "View All Departments",
             new inquirer.Separator(),
-            "View All Employees By Role", 
+            "View All Roles", 
             new inquirer.Separator(),
             "Add Employee", 
             new inquirer.Separator(),
             "Remove Employee",
             new inquirer.Separator(),
-            "Update Employee Role", 
-            new inquirer.Separator(),
-            "Update Employee Manager",
-            new inquirer.Separator(),
+           // "Update Employee Role", 
+            // new inquirer.Separator(),
+            // "Update Employee Manager",
+            // new inquirer.Separator(),
             "Exit"
         ],
-    }, 
+    } 
 ])
     .then(function(answer){
         switch (answer.action) {
             case "View All Employees":
-                allEmployees();                 
+                viewEmployees();                 
                 break;
-            case "View All Employees By Department":
+            case "View All Departments":
                 ByDept();
                 break;
-            case "View All Employees By Role":
+            case "View All Roles":
                 ByRole();
                 break;
             case "Add Employee":
@@ -60,4 +61,12 @@ Init() {
         }
     });
 
+}
+init()
+
+function viewEmployees() {
+    Database.allEmployees().then(([data])=>{
+let employees = data;
+console.table(employees)
+    })
 }
